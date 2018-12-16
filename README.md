@@ -39,7 +39,7 @@ C моделью я особо не заморачивался: основное
 acc на валидации (валидировался я на предоставленном тестовом сете картинок) составила **0.95**
 
 
-### Запуск
+## Запуск
 
 Все нужные для работы системы зависимости прописаны в `requirements.txt`
 
@@ -49,4 +49,4 @@ acc на валидации (валидировался я на предоста
 
 * coreml transormer, который переводит модель в core-ml формат, предназначенный для работы на мобильном устройсте
 
-* REST - сервис, который по запросу `curl -F "image=@path/to/local/image.jpg" http://server_host:8888/glass_no_glass/` выдаст ответ вида `{"answer": "no_glass"}`. Запуск: "python3 deploy/rest_server/server.py"
+* REST - сервис, который по запросу `curl -F "image=@path/to/local/image.jpg" http://server_host:8888/glass_no_glass/` выдаст ответ вида `{"answer": "no_glass"}`. Запуск: `python3 deploy/server.py`
