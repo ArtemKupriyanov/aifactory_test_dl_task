@@ -4,25 +4,32 @@ import sys
 from flask import Flask, request
 from flask import jsonify
 
+import dlib
+import numpy as np
+import cv2
 import numpy as np
 import cv2
 
 from tqdm import tqdm
 
-import server_utils
 from werkzeug.serving import WSGIRequestHandler
 
-from deploy.inference_model import InferenceModel
+from inference_model import InferenceModel
 
 app = Flask(__name__)
 app.config.from_object(__name__)
 
-model = InferenceModel("../models/best_2.h5")
+model = InferenceModel("./models/best_2.h5")
 
+def get_image_from_request(request):
+    filestr = request.files['image'].read()
+    nparr = np.fromstring(filestr, np.uint8)
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    return img
 
 @app.route('/glass_no_glass/', methods=['GET', 'POST'])
 def glass_no_glass():
-    image = server_utils.get_image_from_request(request)
+    image = get_image_from_request(request)
     preds = model.run(image)
     preds_str = "glasses" if preds else "no_glasses"
     return jsonify({"answer": preds_str})

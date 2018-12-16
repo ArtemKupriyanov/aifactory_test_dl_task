@@ -3,7 +3,7 @@ from skimage import io
 import cv2
 import keras
 from keras.datasets import mnist
-from keras.models import Sequential
+from keras.models import Sequential, load_model
 from keras.layers import Dense, Dropout, Flatten, Activation
 from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
 from keras import backend as K
@@ -15,9 +15,9 @@ import dlib
 import matplotlib.pyplot as plt
 
 class InferenceModel:
-    def __init__(self, model_path="./best_2.h5"):
+    def __init__(self, model_path="./models/best_2.h5"):
         self.dlib_detector = dlib.get_frontal_face_detector()
-        self.dnn_face_detector = dlib.cnn_face_detection_model_v1("./dlib-models/mmod_human_face_detector.dat")
+        self.dnn_face_detector = dlib.cnn_face_detection_model_v1("./models/mmod_human_face_detector.dat")
 
         self.model = load_model(model_path)
         self.model._make_predict_function()
