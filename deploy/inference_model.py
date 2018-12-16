@@ -1,5 +1,21 @@
+from glob import glob
+from skimage import io
+import cv2
+import keras
+from keras.datasets import mnist
+from keras.models import Sequential
+from keras.layers import Dense, Dropout, Flatten, Activation
+from keras.layers import Conv2D, MaxPooling2D, GlobalAveragePooling2D
+from keras import backend as K
+from keras.utils import to_categorical
+import numpy as np
+from tqdm import tqdm_notebook
+import dlib
+
+import matplotlib.pyplot as plt
+
 class InferenceModel:
-    def __init__(self, model_path="./best.h5"):
+    def __init__(self, model_path="./best_2.h5"):
         self.dlib_detector = dlib.get_frontal_face_detector()
         self.dnn_face_detector = dlib.cnn_face_detection_model_v1("./dlib-models/mmod_human_face_detector.dat")
 
@@ -8,12 +24,12 @@ class InferenceModel:
     
     def run(self, image):
         to_nn_image = self.preprocessing(image)
-        predictions = model.predict(image)[0]
+        predictions = np.argmax(self.model.predict(to_nn_image)[0])
         return predictions
     
     def preprocessing(self, image):
         eye_zone_image = self.get_eyes_zone(image)
-        to_nn_image = [self.make_square(eye_zone_image)]
+        to_nn_image = np.array([self.make_square(eye_zone_image)])
         return to_nn_image
         
     def get_rect(self, image):

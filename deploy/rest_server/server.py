@@ -23,9 +23,9 @@ model = InferenceModel("../models/best_2.h5")
 @app.route('/glass_no_glass/', methods=['GET', 'POST'])
 def glass_no_glass():
     image = server_utils.get_image_from_request(request)
-    model.run(image)
-    
-    return jsonify(resp)
+    preds = model.run(image)
+    preds_str = "glasses" if preds else "no_glasses"
+    return jsonify({"answer": preds_str})
 
 @app.route('/ping/', methods=['GET'])
 def ping():
